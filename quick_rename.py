@@ -19,9 +19,7 @@ def rem_spchr(filename):
 	filename = re.sub(r'^\W*\s*', "", filename)
 	return filename
 
-
-for filename in filenames:
-	oldname = filename
+def get_title(filename):
 	try:
 		song = taglib.File(filename)
 		newname = str(song.tags["TITLE"][0])+".mp3"
@@ -30,6 +28,11 @@ for filename in filenames:
 		newname = filename
 	finally:
 		song.close()
+	return newname
+
+for filename in filenames:
+	oldname = filename
+	
 	
 	
 	newname = rem_brackets(newname)

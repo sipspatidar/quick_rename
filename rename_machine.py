@@ -4,6 +4,17 @@
 import os,re
 import argparse
 
+def get_title(filename):
+	try:
+		song = taglib.File(filename)
+		newname = str(song.tags["TITLE"][0])+".mp3"
+	except:
+		print("cant read")
+		newname = filename
+	finally:
+		song.close()
+	return newname
+
 def rem_brackets(filename):
 	filename = re.sub(r'^(\[?\D*\]\s*)', "", filename)
 	filename = re.sub(r'^(\[?\D*\]\s*)', "", filename)
@@ -40,6 +51,7 @@ def Main():
 	if not any([args.brackets,args.digits,args.spchr]):
 		for filename in filenames:
 			oldname = filename
+			filename = get_title(filename)
 			filename = rem_brackets(filename)
 			filename = rem_digit(filename)
 			filename = rem_spchr(filename)
@@ -47,16 +59,19 @@ def Main():
 	if args.brackets:
 		for filename in filenames:
 			oldname = filename
+			filename = get_title(filename)
 			filename = rem_brackets(filename)
 			ren(oldname,filename)
 	if args.digits:
 		for filename in filenames:
 			oldname = filename
+			filename = get_title(filename)
 			filename = rem_digit(filename)
 			ren(oldname,filename)
 	if args.spchr:
 		for filename in filenames:
 			oldname = filename
+			filename = get_title(filename)
 			filename = rem_spchr(filename)
 			ren(oldname,filename)
 	
