@@ -1,4 +1,5 @@
 import os,re
+import taglib
 
 path = input("Enter the path : ")
 os.chdir(path)
@@ -21,16 +22,27 @@ def rem_spchr(filename):
 
 for filename in filenames:
 	oldname = filename
-	filename = rem_brackets(filename)
-	filename = rem_digit(filename)
-	filename = rem_spchr(filename)
-	if filename == "":
-		filename = oldname
-	filename = filename.capitalize()
 	try:
-		os.rename(oldname, filename)
+		song = taglib.File(filename)
+		newname = str(song.tags["TITLE"][0])+".mp3"
+	except:
+		print("cant read")
+		newname = filename
+	finally:
+		song.close()
+	
+	
+	newname = rem_brackets(newname)
+	newname = rem_digit(newname)
+	newname = rem_spchr(newname)
+	if newname == "":
+		newname = oldname
+	newname = newname.capitalize()
+	try:
+		os.rename(oldname, newname)
 	except FileExistsError:
 		print("[error]file already exist : ",oldname)
+		os.rename(oldname, newname+'[1]')
 	except:
 		print("Can't able to remane file : ",oldname)
 		
